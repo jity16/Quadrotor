@@ -1,0 +1,21 @@
+cmake_minimum_required(VERSION 3.5)
+project(DRONE)
+set(CMAKE_CXX_STANDARD 11)
+
+option(BUILD_RRTRPC "Build RRT router with RPC support" OFF)
+
+if (BUILD_RRTRPC)
+    message(BUILD_RRTRPC ${BUILD_RRTRPC})
+    add_compile_definitions(BUILD_RRTRPC=1)
+endif()
+
+if(UNIX)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -pthread")
+else()
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+endif()
+add_definitions(-DNON_MATLAB_PARSING=1 -DMAX_EXT_API_CONNECTIONS=255 -DDO_NOT_USE_SHARED_MEMORY=1)
+add_subdirectory(Common)
+link_libraries(common)
+add_subdirectory(Landing)
+add_subdirectory(Planning)
